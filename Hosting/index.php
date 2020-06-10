@@ -98,9 +98,9 @@
                 
                 foreach ($conn->query($sql1) as $row1) {
                 echo '<hr>';
-                echo '<label for="kto">Kto: </label>';
+                echo '<label>Kto: </label>';
                 echo $row1['login'].'<br><br>';
-                echo '<label for="komentarz">Treść: </label>';
+                echo '<label">Treść: </label>';
                 echo $row1['komentarz'].'<br><br>';
                 
                 }
