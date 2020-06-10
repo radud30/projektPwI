@@ -1,5 +1,25 @@
 <?php
 session_start();
+ if($_SESSION['tupu'] == 1 ){
+     header('location: index.php');
+ }
+$conn = new PDO('mysql:host=localhost;dbname=id13934076_blogwedkarskibaza', 'id13934076_blogwedkarski','RYJaq0SJ=&{#\el2');
+$conn->exec("SET NAMES utf8");
+
+  if(isset($_POST['zhasla'])){
+                $haslo1 = hash('sha224', $_POST['haslo']);
+                $haslo2 = hash('sha224', $_POST['phaslo']);
+                if($haslo1 == $haslo2){
+                    $queryed = $conn->prepare('UPDATE uzytkownicy 
+                            SET hash = "'.$haslo1.'"
+                            WHERE id_u ='.$_SESSION['id_uz']);
+                    $queryed->execute();
+                    header('location: index.php');
+                }
+                
+            }
+            
+
 ?>
 <!doctype html>
 <html>
@@ -39,7 +59,7 @@ session_start();
                        echo '<a href="Wyloguj.php">Wyloguj</a>';
                     
                     }
-                    if(isset($_SESSION['tupu']) && $_SESSION['tupu'] == 1){
+                    if($_SESSION['tupu'] == 1){
                        echo '/';
                        echo '<a href="Administrator.php">Administrator</a>'; 
                      
@@ -59,22 +79,27 @@ session_start();
         <article class="glowna">
             
             <section>
-                <h1>
-                    DANE KONTAKTOWE 
-                </h1>
-                <p>
-                    Imię:
-                </p>
-                <p>
-                    Nazwisko:
-                </p>
-                <p>
-                    E-mail:
-                </p>
-                <p>
-                    Telefon:
-                </p>
+               <h1>Zmiana hasła</h1>
             </section>
+            <section>
+                <form method="post">
+                <label>Nowe hasło:</label>
+                <input type="password" id="haslo" name="haslo" required><br>
+                <label>Powtórz hasło:</label>
+                <input type="password" id="phaslo" name="phaslo" required><br>
+                <input type="submit" name = "zhasla" value="Zmien">
+                </form>
+                
+                <?php
+            
+            if(isset($haslo1) && $haslo1 != $haslo2){
+                    echo '<b id = "blad">Błędne powtórzenie!</b>';
+                }
+                
+            ?>
+                
+            </section>
+            
             
         </article>
         <aside class="prawa">

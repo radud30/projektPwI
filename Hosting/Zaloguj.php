@@ -22,6 +22,7 @@ if(isset($_POST['login'])){
         $row = $query1->fetch();
         $_SESSION['id_uz'] = $row['id_u'];
         $_SESSION['tupu'] = $row['typ_u'];
+        $_SESSION['username'] = $row['login'];
 
         header('location: index.php');
     }

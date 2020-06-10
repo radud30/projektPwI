@@ -20,7 +20,23 @@ $conn = new PDO('mysql:host=localhost;dbname=id13934076_blogwedkarskibaza', 'id1
                     header('location: index.php');          
                    
                 }
-
+if(isset($_POST['edyt'])){
+                    $tytuledytuj = $_POST['tytuledytuj'];
+                    $trescedytuj = $_POST['trescedytuj'];
+                    $linkedytuj = $_POST['linkedytuj'];
+                    // echo $_SESSION['id_wpis'];
+                    
+                    $queryed = $conn->prepare('UPDATE wpis 
+                            SET temat = "'.$tytuledytuj.'", tresc = "'.$trescedytuj.'", zdjecie = "'.$linkedytuj.'"
+                            WHERE id_wpisu ='.$_SESSION['id_wpis']);
+                    $queryed->execute();
+                     
+                    unset($_SESSION['tytul']);
+                    unset($_SESSION['tresc']);
+                    unset($_SESSION['zdjecie']);
+                    
+                    header('location: index.php');
+                 }
 
 ?>
 <!doctype html>
@@ -130,16 +146,57 @@ $conn = new PDO('mysql:host=localhost;dbname=id13934076_blogwedkarskibaza', 'id1
                     <select id="ids1" name="ids1">
                         <?php
                         
-                        $sql = "SELECT * FROM komentarze";
+                        $sql = "SELECT * FROM komentrze";
                         foreach ($conn->query($sql) as $row) {
-                            echo "<option value=".$row['id_kom'].">".$row['komentarz']."</option>";
+                            echo "<option value=".$row['id'].">".$row['komentarz']."</option>";
                         }
                         ?>
                     </select>
                     <input type="submit" value="USUŃ">
              </form>
 
-        </section>   
+        </section> 
+        <section>
+                <H3>
+                    Edycja wpisu na blogu:
+                </H3>
+            
+             <form action="Edytuj.php" method="get">
+                    <select id="ids3" name="ids3">
+                        <?php
+                        
+                        $sql = "SELECT * FROM wpis";
+                        foreach ($conn->query($sql) as $row) {
+                            echo "<option value=".$row['id_wpisu'].">".$row['temat']."</option>";
+                        }
+                        
+                        
+                        
+                        ?>
+                    </select>
+                    <input type="submit"  value="Wyświetl">
+                    </form>
+                    
+                <?php
+             
+             if(isset($_SESSION['tytul'])){
+                 echo '<form id = "edycja" method="post">';
+                 echo '<label for="tytul">Tytuł:</label>';
+                 echo '<input type="text" id="tytuledytuj" name="tytuledytuj" value ="'.$_SESSION['tytul'].'" required><br>';
+                 echo '<textarea name="trescedytuj" rows="7" cols="130">'.$_SESSION['tresc'].'</textarea><br><br>';
+                 echo '<label for="tytul">Link do zdjęcia:</label>';
+                 echo '<input type="text" id="linkedytuj" name="linkedytuj" value ="'.$_SESSION['zdjecie'].'" required><br>';
+                 echo '<input type="submit" name ="edyt" value="Edytuj">';
+                 echo '</form>';
+                 
+             }
+             ?>
+            
+                 
+                
+            </section>
+            
+        
         </article>
         <aside class="prawa">
             <h3>

@@ -43,6 +43,10 @@
                        echo '/';
                        echo '<a href="Administrator.php">Administrator</a>'; 
                      
+                    }else if(isset($_SESSION['zalogowany'])){
+                        echo '/';
+                        echo '<a href="Profil.php"> '.$_SESSION['username'].'</a>'; 
+                       
                     }
                     
                     ?>

@@ -61,6 +61,10 @@
                        echo '/';
                        echo '<a href="Administrator.php">Administrator</a>'; 
                      
+                    }else if(isset($_SESSION['zalogowany'])){
+                        echo '/';
+                        echo '<a href="Profil.php"> '.$_SESSION['username'].'</a>'; 
+                       
                     }
                     
                     ?>
@@ -74,18 +78,46 @@
             <?php
             
             //RYJaq0SJ=&{#\el2
-            
+           
             $conn->exec("SET NAMES utf8");
             $sql = 'SELECT * FROM wpis ORDER BY id_wpisu DESC';
             
+            
+            
             foreach ($conn->query($sql) as $row) {
+                $idwpisu = $row['id_wpisu'];
                 echo '<section>';
-                echo '<img src='.$row['zdjecie'].' alt="zle zaladowane">';
+                echo '<img src='.$row['zdjecie'].' alt="Niepoprawnie wgrane zdjęcie">';
                 echo '<h2>'.$row['temat'].'</h2>';
                 echo '<p>'.$row['tresc'].'</p><br>';
+                
+                echo '<hr>';
+                echo '<h3>KOMENTARZE DO WPISU:</h3>';
+                
+                $sql1 = 'SELECT uzytkownicy.login, komentrze.komentarz, komentrze.id_w FROM uzytkownicy, komentrze WHERE komentrze.id_u = uzytkownicy.id_u AND  komentrze.id_w ="'.$idwpisu.'" ';
+                
+                foreach ($conn->query($sql1) as $row1) {
+                echo '<hr>';
+                echo '<label for="kto">Kto: </label>';
+                echo $row1['login'].'<br><br>';
+                echo '<label for="komentarz">Treść: </label>';
+                echo $row1['komentarz'].'<br><br>';
+                
+                }
+                
+                echo '<form action="Dodajkom.php" method="get">';
+                echo '<h3>Napisz komentarz:</h3>';
+                echo '<textarea name="kom" rows="5" cols="80">Miejsce na Twój komentarz.</textarea><br><br>';
+                echo '<input type="submit" value="DODAJ">';
+                echo '<input type="hidden" id="custId" name="custId" value="'.$idwpisu.'">';
+                echo '</form>';
                 echo '</section>';
                 
+                 
+                
+                
             }
+           
             
          
             
@@ -108,38 +140,7 @@
               <a href="https://www.google.pl/" class="google"><i class="fa fa-google"></i></a>
               <a href="https://www.youtube.com" class="youtube"><i class="fa fa-youtube"></i></a>
             </div>
-            <h3>
-                OPINIE I KOMENTARZE:
-            </h3>
-            
-             <form id = "komentarze" method="post">
-                 <?php
-                 
-               
-                 
-                    $sql1 = 'SELECT uzytkownicy.login, komentarze.komentarz FROM uzytkownicy, komentarze WHERE komentarze.id_u = uzytkownicy.id_u';
-                 echo '<hr>';
-                 foreach ($conn->query($sql1) as $row) {
-                   echo '<section>';
-                   echo '<label>Kto: </label>';
-                   echo $row['login'].'<br><br>';
-                   echo '<label>Treść: </label>';
-                   echo $row['komentarz'].'<br><br>';
-                   echo '<hr>';
-                   echo '</section>';
-
-                }
-       
-                 
-                 
-                 ?>
-                  
-                  <h3>Napisz komentarz:</h3>
-                  <textarea name="message" rows="5" cols="40">Miejsce na Twój komentarz.</textarea><br><br>
-                  <input type="submit" name ="komentarzyk" value="DODAJ"><br><br>
-                </form>
-            
-
+           
             
             
         </aside>  
